@@ -1,0 +1,13 @@
+server:
+  port: ${PORT:8888}
+
+spring:
+  application:
+    name: configserver
+  cloud:
+    config:
+      server:
+        git:
+          uri: file://C:/Users/Leandro Occhiato/Desktop/localconf
+          #uri: https://github.com/locchiato/config-server
+

@@ -1,0 +1,41 @@
+version: "3.2"
+services:
+  zipkin:
+      image: openzipkin/zipkin:2
+      ports:
+        - 9411:9411
+  rabbitmq:
+      image: rabbitmq:3-management
+      ports:
+        - 5672:5672
+        - 15672:15672
+  movies-database:
+    image: bitnami/mysql:latest
+    container_name: dh-final-movies-db
+    ports:
+      - 3308:3308
+    environment:
+      MYSQL_ROOT_PASSWORD: "m4nd1"
+      BITNAMI_DEBUG: "true"
+    volumes:
+      - ./inits/init-movies-database.sql:/docker-entrypoint-initdb.d/init.sql
+  series-database:
+    image: mongo:5.0
+    ports:
+      - 27019:27017
+    volumes:
+      - ./inits/init-series-database.js:/docker-entrypoint-initdb.d/init.js:ro
+      - ~/apps/mongo1:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=citizix
+      - MONGO_INITDB_ROOT_PASSWORD=S3cret
+  catalog-database:
+    image: mongo:5.0
+    ports:
+      - 27018:27017
+    volumes:
+      - ./inits/init-catalog-database.js:/docker-entrypoint-initdb.d/init.js:ro
+      - ~/apps/mongo2:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=citizix
+      - MONGO_INITDB_ROOT_PASSWORD=S3cret
